@@ -10,3 +10,5 @@
 10. Use \small or higher for bibliography.
 11. Use title case for bibliography. Technically this is part of the bib format, but most bibs don't seem to handle url citations well. So, I think title case is a good choice for everything.
 12. Add \pagebreak (not \newpage) to fix orphans if required. Don't use widowpenalty because that's too draconian.
+13. Avoid vspace.
+14. Cite only things you completely understand.
