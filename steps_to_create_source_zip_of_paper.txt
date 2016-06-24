@@ -1,0 +1,9 @@
+1. Delete everything in /tmp.
+2. Copy entire source repo to /tmp.
+3. rm anything you absolutely want to remove.
+4. rm -rf .git
+5. zip up the folder.
+6. Delete the folder you just zipped.
+7. Unzip it.
+8. Compile the latex and make sure it works ok.
+9. Upload the zip
