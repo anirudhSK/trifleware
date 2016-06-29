@@ -6,9 +6,9 @@
 6. Font size on figures should be readable.
 7. Print and check contrast.
 8. Keep figures on top.
-9. Keep a sparse bibliography, i.e., don't mention conference location etc.
+9. Keep a sparse bibliography, i.e., don't mention conference location etc. Only mention paper title, authors, conference name, and year.
 10. Use \small or higher for bibliography.
-11. Use title case for bibliography. Technically this is part of the bib format, but most bibs don't seem to handle url citations well. So, I think title case is a good choice for everything.
+11. Use title case for bibliography. Technically this is part of the bib format, but most bibs don't seem to handle url citations well (or don't have a well-defined case for them). So, I think title case is a good choice for everything.
 12. Add \pagebreak (not \newpage) to fix orphans if required. Don't use widowpenalty because that's too draconian.
-13. Avoid vspace.
+13. Avoid vspace at all costs.
 14. Cite only things you completely understand.
