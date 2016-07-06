@@ -7,3 +7,4 @@
 7. Unzip it.
 8. Compile the latex and make sure it works ok.
 9. Upload the zip
+10. Remove the extracted folder and zip file
