@@ -1,6 +1,6 @@
 1. Delete everything in /tmp.
 2. Copy entire source repo to /tmp.
-3. rm anything you absolutely want to remove.
+3. rm anything you absolutely want to remove, also make clean
 4. rm -rf .git
 5. zip up the folder.
 6. Delete the folder you just zipped.
