@@ -1,0 +1,26 @@
+Some of these are probably repetitive and can be found in a style guide, but here goes nothing.
+
+1. Eg and Ie are written as "e.g., " and "i.e., " because they are abbreviations for "for example" and "that is".
+
+2. Use which or that appropriately depending on whether the clause is restrictive (that) or non-restrictive (which).
+Technically, which can also be used restrictively, but that's too confusing.
+
+3. Ranges, e.g., 1 to 10 are typeset using an en-dash: --
+   Parenthetical statements are typeset using an em-dash: ---
+   Compound adjectives are typeset using a hyphen: -
+
+4. Hyphenate compound adjectives when in doubt as to how they may be parsed.
+
+5. When in doubt, consult a style guide, e.g, The Chicago Manual of Style.
+
+6. Footnotes should not break pronunciations.
+
+7. et al is "et al."
+
+8. versus is "vs."
+
+9. Resist the em-dash unless there's a compelling need for it.
+
+10. Contractions aren't good form in written text.
+
+11. Anthropomorphisms aren't allowed either, although the lack of anthropomorphisms leads to very verbose text. 

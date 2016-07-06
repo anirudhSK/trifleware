@@ -1,0 +1,31 @@
+1. Widows and orphans.
+
+2. You should have sections, subsections, and \noindent paragraphs that end with a period and run on.
+2a. Avoid subsubsections.
+
+3. Figures should be in order and appear close to the text (same page preferably or the immediate next one).
+
+4. Consistent rules for et al. (preferably don't use et al at all).
+4a. Also, it is "et al."
+
+5. References to papers must be sorted.
+
+6. Font size on figures should be readable when the pdf is scaled to the size of a letter paper (around 134% on Linux).
+
+7. Print and check contrast when printed in black and white.
+
+8. Keep figures on top (use the !t modifier in Latex).
+
+9. Keep a sparse bibliography, i.e., don't mention conference location etc. Only mention paper title, authors, conference name, and year.
+
+10. Use \small or higher for bibliography. Everything else seems far too small.
+
+11. Use title case for bibliography. Technically this is part of the bib format (and not something you decide). But most bibs don't seem to handle url citations well (or don't have a well-defined case for them). So, I think title case is a good choice for everything.
+
+12. Add \pagebreak (not \newpage) to fix orphans if required. Don't use widowpenalty because that's too draconian.
+
+13. Avoid vspace at all costs.
+
+14. Cite only things you completely understand.
+
+15. Cite as much as required and don't go overboard when citing.

@@ -1,0 +1,18 @@
+1. Use large fonts, typically just render it in a projector and check.
+
+2. Ensure good contrast.
+   --- White on black is good.
+   --- Red on black isn't good.
+   --- White on blue is good, but black on blue isn't great.
+
+Again, render it on a projector and check.
+
+3. Use version control for ppts as well. Even if they are binaries, it allows you to roll back and make changes securely.
+
+4. Use standard fonts, e.g., Gadugi seems restricted to Windows, while Sans Serif, Times New Roman, and Verdana seem to work on Mac as well.
+
+5. Either use title case or sentence case, but be consistent.
+
+6. Don't introduce too many terms of art---and be consistent about the ones you do introduce.
+
+7. For a one hour talk, practice for around 45 minutes without interruption.
