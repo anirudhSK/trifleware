@@ -24,3 +24,9 @@ Technically, which can also be used restrictively, but that's too confusing.
 10. Contractions aren't good form in written text.
 
 11. Anthropomorphisms aren't allowed either, although the lack of anthropomorphisms leads to very verbose text. 
+
+12. Avoid participles and complex tenses (past continuous, past perfect, etc.). Prefer simple present, simple past, and simple future.
+This is my own preference, but it has considerably simplified life for me.
+
+13. its: the possessive of it
+    it's: a contraction of "it is"
