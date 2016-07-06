@@ -1,0 +1,9 @@
+1. Beta test your diagrams with people who haven't read the paper. This
+pertains to the text as well, but seems even more critical with diagrams.
+
+2. Pick a tool and be consistent with it (dia or inkscape on Linux, Visio or
+PPT on Windows). Learning one tool well saves me a lot of grief.
+
+3. Ensure there's good color contrast on the figures. And try and ensure it's
+readable in black and white. Although, I am divided on this. Presumably, we should
+be exploiting the fact that most readers have a color screen and/or color printers.
