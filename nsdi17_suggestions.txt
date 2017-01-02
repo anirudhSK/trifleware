@@ -1,0 +1,32 @@
+There is a set of errors that almost everybody is making in their text and
+bibliographies. (If this doesn't apply to you, then you probably don't have
+a bibliography, or you are aren't using Latex!)
+
+* [LaTeX] Proper names in reference titles need protecting from Bibtex.
+Use {curly braces} around them, or Bibtex will map them all to lower case.
+
+* Make sure abbreviations are consistent (e.g., is NSDI spelled out or
+not?) - using the @abbrev function in latex helps here.
+
+* Make sure there is enough info for a reader to find the document: authors
+plus title isn't enough.
+
+* Don't blindly copy and paste ACM bibtex entries without fixing them:
+  - they list "New York, NY" as the address field, which means that all ACM
+conferences look like they took place there; just delete this, or - better
+- replace it with where the conference took place, which is much more
+helpful to the reader than the publisher's address
+  - they have a truly weird idea about how to capitalize conference names;
+just correct this (consistently)
+* IEEE is about as bad, and uses a partially-inverted form of conference
+names.
+* Please actually read the bibliography before submitting your paper!
+
+
+And while you are at it, please:
+
+* [LaTeX] add \include{mathpmtc} in the main LaTeX file, so you don't have
+math stuff in a different font than the main text
+* don't put SI units in italics
+* do differentiate between bits (b) and bytes (B), and between powers of 10
+(MB) and 2 (MiB).
