@@ -33,3 +33,5 @@
 16. Prefer not to use et al. Instead list all authors in the bibliography.
 
 17. Contractions are not allowed in formal writing
+
+18. Don't overuse abbreviations and certainly define them the first time around.
