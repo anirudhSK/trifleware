@@ -35,3 +35,5 @@
 17. Contractions are not allowed in formal writing
 
 18. Don't overuse abbreviations and certainly define them the first time around.
+
+19. NIST style guide on SI units (http://physics.nist.gov/cuu/Units/checklist.html)
