@@ -41,3 +41,5 @@
 20. There shouldn't be a space before M when it refers to 10 Million (i.e., we should write 10M and 10 M).
 
 21. I think there should be a space between 100 and G, when writing 100 G (for link speed). This is because it's a unit, but I could be wrong.
+
+22. Rule on capitalizing the expansion of abbreviations: https://english.stackexchange.com/questions/40427/capitalization-of-explanation-of-abbreviations
