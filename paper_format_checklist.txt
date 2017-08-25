@@ -32,7 +32,7 @@
 
 16. Prefer not to use et al. Instead list all authors in the bibliography.
 
-17. Contractions are not allowed in formal writing
+17. Contractions are not allowed in formal writing. An occasional contraction is OK.
 
 18. Don't overuse abbreviations and certainly define them the first time around.
 
@@ -45,3 +45,7 @@
 22. Rule on capitalizing the expansion of abbreviations: https://english.stackexchange.com/questions/40427/capitalization-of-explanation-of-abbreviations
 
 23. Rules on commas before and: https://www.grammarly.com/blog/comma-before-and/
+
+24. Either use periods after captions or not, but be consistent.
+
+25. Either use colons before introducing a theorem or a code snippet or not, but be consistent.
