@@ -46,6 +46,6 @@
 
 23. Rules on commas before and: https://www.grammarly.com/blog/comma-before-and/
 
-24. Either use periods after captions or not, but be consistent.
+24. Either use periods after captions or not, but be consistent. (https://english.stackexchange.com/questions/121551/caption-text-punctuation-full-stops-always-necessary-at-the-end says both are OK, but always use periods after full sentences.)
 
 25. Either use colons before introducing a theorem or a code snippet or not, but be consistent.
