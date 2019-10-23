@@ -1,0 +1,7 @@
+1. Check that underscores in citations are rendered as underscores and not as subscript in Latex math mode.
+
+2. Ensure all URLs referenced in the citations are actually accessible (you should not get a 404 not found).
+
+3. Ensure the paper cites the correct citation at each location.
+
+4. Ensure there are no duplicate citations.
