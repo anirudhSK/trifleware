@@ -1,0 +1,4 @@
+@misc: URLs (specify web page title by looking at the web page and web page URL)
+@inproceedings: booktitle (e.g., SIGCOMM) year (e.g., 2019) authors (e.g., Anirudh) paper title (e.g., {{A Paper}}) Use two braces always.
+@article: author, title, journal, year
+@phdthesis: author, title, school, year, URL
