@@ -1,5 +1,7 @@
 Some of these are probably repetitive and can be found in a style guide, but here goes nothing.
 
+0. In title case, capitalize the second word in hyphenated words: https://blog.apastyle.org/apastyle/2012/03/title-case-and-sentence-case-capitalization-in-apa-style.html
+
 1. Eg and Ie are written as "e.g., " and "i.e., " because they are abbreviations for "for example" and "that is".
 
 2. Use which or that appropriately depending on whether the clause is restrictive (that) or non-restrictive (which).
