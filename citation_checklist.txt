@@ -5,3 +5,5 @@
 3. Ensure the paper cites the correct citation at each location.
 
 4. Ensure there are no duplicate citations.
+
+5. Ensure citations are all in title case. You can do this by enclosing paper names in double braces instead of single braces.
