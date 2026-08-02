@@ -6,4 +6,10 @@ Updates as of 2026: With Claude Code, many of the nitpicks here can be turned in
 1. SI unit typesetting
 2. Grammatical mistakes.
 3. Typos.
-4. ... more to come.
+4. Critical, but fair minded reviewing in the style of NINES
+5. Many types of reviewers:
+  * Is the problem well-motivated?
+  * Is the evaluation well-done?
+  * Is the writing clear?
+  * Is it fair to related work?
+6. Checking define-before-use errors in writing.
