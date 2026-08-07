@@ -13,3 +13,16 @@ Updates as of 2026: With Claude Code, many of the nitpicks here can be turned in
   * Is the writing clear?
   * Is it fair to related work?
 6. Checking define-before-use errors in writing.
+
+skills/ holds the ones that exist so far. To use a skill, copy or symlink its
+directory into ~/.claude/skills/ (available in every project) or into
+<project>/.claude/skills/ (that project only), then ask Claude to proofread:
+
+  ln -s "$PWD/skills/proofread-paper" ~/.claude/skills/proofread-paper
+
+- skills/proofread-paper: pre-submission copy-editing pass over a LaTeX paper.
+  Reads the rendered PDF rather than the .tex source, because source-level
+  reading misses sentences that are split across a commented-out line. Covers
+  most of paper_format_checklist.txt, writing_checklist.txt, and
+  citation_checklist.txt, plus dangling refs, leaked review annotations, orphan
+  floats, and figure numbers that point at the wrong figure.
