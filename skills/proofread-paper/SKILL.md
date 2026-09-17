@@ -197,6 +197,27 @@ grep -oP "\b[A-Z][A-Za-z]+(?:[A-Z][A-Za-z]*)*\b(?! ?\[)" flat.txt | sort -u | le
 (Eyeball the list; a regex cannot decide what is a system name. It will be noisy —
 sentence-initial words, section headings — but uncited systems stand out.)
 
+### Use before define
+
+Every abbreviation must be expanded at its *first* occurrence in reading order — and the
+first occurrence is the one in the PDF, not the one in the file you happen to open. The
+abstract and the introduction each define independently; after that, define once.
+
+```bash
+# first page each acronym appears on, vs. the page its expansion appears on
+for a in $(grep -oE "\b[A-Z]{2,6}s?\b" flat.txt | sort -u); do
+  printf "%-8s first=%s\n" "$a" "$(grep -n "$a" body.txt | head -1 | cut -d: -f1)"
+done
+```
+
+Eyeball the list against where each expansion occurs. Real examples caught this way: OCI,
+RNIC, SVM and OWD-CC all used in the evaluation with no expansion anywhere; NCCL used in
+four sections while its only expansion sat in a draft file that `main.tex` no longer
+inputs.
+
+The same failure mode applies to a term the paper renamed halfway through: grep for both
+the old and the new name and check which one the reader meets first.
+
 ### Numbers in prose vs. numbers in the figure they cite
 
 For every sentence that cites a figure or table and states a number, open the figure and
@@ -282,14 +303,61 @@ Real failures found:
 - Read the bibliography end to end before submitting. Cite only what you understand, and
   do not pad.
 
-### Page limit
+### Page limit, and how to shrink when you are over
 
 ```bash
 pdftotext -f <limit+1> -l <limit+1> main.pdf - | head -1   # expect "References"
 ```
 
-Confirm against the venue's actual rule (body only vs. everything). Fix orphans/widows
-with `\pagebreak`, not `\vspace` and not `widowpenalty`.
+Confirm against the venue's actual rule (body only vs. everything).
+
+**First measure the overflow in typeset lines, not in vague "about a page".** Count the
+body lines that spill past the limit; a two-column body page is ~54 lines per column, so
+"half a column over" is ~27 lines:
+
+```bash
+pdftotext -layout -f <limit+1> -l <limit+1> main.pdf - | \
+  awk '{c=substr($0,1,70); gsub(/^[ \t]+|[ \t]+$/,"",c); if(c!="") print NR": "c}'
+```
+
+Then spend that budget in this order — cheapest and least damaging first.
+
+1. **Unreferenced floats.** A figure nothing in the prose points at is *already* a defect
+   (see "Reference coverage"); cutting it or moving it to the appendix fixes the defect
+   and buys the most space of anything on this list. Compute what each one is actually
+   costing, rather than guessing from `width=`:
+
+   ```bash
+   # rendered height = column width (~241pt in a 2-col letter template) x aspect ratio
+   pdfinfo fig.pdf | awk '/Page size/{cw=241*0.9; printf "%.0fpt (~%.1f lines)\n", \
+     cw*($5/$3), cw*($5/$3)/11}'
+   ```
+
+   One unreferenced 0.9-linewidth plot came to 282pt ≈ 26 lines, plus caption and float
+   separation ≈ 30 lines — the entire overflow in a single move.
+
+2. **Stray vertical space.** Audit every hand-tuned `\vspace`, especially positive ones
+   that crept in around floats:
+
+   ```bash
+   grep -rn "vspace" *.tex | grep -v ":[0-9]*: *%"
+   ```
+
+   Look for a `\vspace{2.0em}` sitting between a `\caption` and its `\label`, and for
+   `\vspace*{-0.5in}` after `\maketitle` — the latter buys space but is exactly what a
+   venue's format check looks for. Flag it rather than relying on it.
+
+3. **Oversized figures.** Dropping `width=1.0\linewidth` to `0.85` on a plot whose axis
+   labels are already large is usually free.
+
+4. **Prose.** Only now, and prefer deleting a redundant sentence to re-wrapping a
+   paragraph; a paragraph that loses its last short line saves a line for free.
+
+Fix orphans/widows with `\pagebreak`, not `\vspace` and not `widowpenalty`.
+
+**Report the shrink options; do not unilaterally delete a figure or a paragraph.** Which
+content is expendable is the author's call, always. Give them the line count each option
+buys so they can choose.
 
 ## Step 4 — Scope discipline (read before editing anything)
 
@@ -330,6 +398,13 @@ numbers you expect and that nothing shifted the page count past the limit.
 A LaTeX build "succeeding" means nothing here — undefined references are warnings.
 
 ## Step 6 — Report
+
+**Do not commit or push anything.** Leave every change in the working tree and hand the
+author the diff to review. A proofreading pass touches almost every file in the paper,
+often hours before a deadline and often against a repo that syncs with Overleaf — an
+unreviewed commit there is worse than the typos it fixed. Commit only when the author
+asks, after they have read the report.
+
 
 Two lists, in this order:
 
