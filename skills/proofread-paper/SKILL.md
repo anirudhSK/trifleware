@@ -272,6 +272,51 @@ grep -oE "^[a-z_]+\(\)" flat.txt          # sentence starting with a lowercase i
 - Captions: end with a period or do not, consistently; always use one after a full sentence.
 - Define every abbreviation at first use; do not overuse them.
 
+### Rhetorical repetition
+
+The same discourse marker, or the same sentence-opening move, reused a few sentences later.
+Every sentence is correct on its own; read end to end, the section has a tic.
+
+```bash
+python3 - <<'EOF'
+import re
+t = re.sub(r'-\s*\n\s*', '', open('body.txt').read())   # de-hyphenate line breaks
+t = re.sub(r'\s+', ' ', t)
+markers = ['Indeed','Furthermore','However','Moreover','Additionally','In fact','Finally',
+           'Lastly','Clearly','Similarly','Instead','Conversely','Hence','Thus','Note that','So']
+hits = sorted((m.start(), w) for w in markers for m in re.finditer(rf'\b{re.escape(w)}\b', t))
+for (p1,w1),(p2,w2) in zip(hits, hits[1:]):
+    if w1 == w2 and p2-p1 < 700:
+        print(f"{w1!r} twice within {p2-p1} chars:\n  {t[p1:p1+90]}\n  {t[p2:p2+90]}\n")
+EOF
+```
+
+In a 6-page workshop paper on RDMA congestion control, the introduction's fourth paragraph
+read: "IRN adapts classical TCP's selective acknowledgment ... `Indeed,` some of these ideas
+have found their way into commercial NICs. Such an approach, however, additionally burdens
+the receiver to put packets that arrived out-of-order back into order. `Indeed,` some
+transports like SRD have found this burdensome enough that they push this problem further up
+the stack." Two `Indeed,` openers 190 characters apart with a single sentence between them,
+and a third — `Indeed, as one example, Meta found DCQCN...` — earlier in the same section.
+The author caught all three by hand on a manual read, after a full source-level proofreading
+pass had missed them.
+
+**Match discourse markers, not content words.** Generic repetition detection on a systems
+paper is uselessly noisy: RDMA, OWD, NIC, goodput and throughput repeat constantly by design,
+and should. Only the connective tissue is a defect when it repeats, so do not grep for
+repeated nouns.
+
+Unlike most sweeps here, this one runs on either the PDF extract or the source — repetition
+is a property of the prose, not the rendering. On `pdftotext` output, de-hyphenate line breaks
+first (the snippet does). On source, strip commented-out lines first, or dead draft text
+manufactures phantom pairs. The window is in characters, not sentences, on purpose: a
+sentence-index approach breaks on two-column extraction artifacts.
+
+The adjacent case is worth eyeballing rather than automating: the same construction opening
+three consecutive paragraphs — "We use...", "We implement...", "We employ...". A grep for
+first-N-words collisions surfaces candidates but cannot judge them. Reading (Step 2) is what
+actually catches this; the grep is a backstop.
+
 ### Bibliography
 
 ```bash
@@ -362,8 +407,8 @@ buys so they can choose.
 ## Step 4 — Scope discipline (read before editing anything)
 
 **Fix directly:** grammar, subject–verb agreement, articles, punctuation, hyphenation,
-spelling, unit spacing and prefix case, citation formatting, plural cross-references,
-undefined/wrong references, leaked annotations.
+spelling, repeated discourse markers, unit spacing and prefix case, citation formatting,
+plural cross-references, undefined/wrong references, leaked annotations.
 
 **Report, do not change:** numbers, measurements, experimental claims, and anything whose
 correctness depends on data you cannot see — **even when it looks obviously wrong.**
