@@ -309,8 +309,14 @@ repeated nouns.
 Unlike most sweeps here, this one runs on either the PDF extract or the source — repetition
 is a property of the prose, not the rendering. On `pdftotext` output, de-hyphenate line breaks
 first (the snippet does). On source, strip commented-out lines first, or dead draft text
-manufactures phantom pairs. The window is in characters, not sentences, on purpose: a
-sentence-index approach breaks on two-column extraction artifacts.
+manufactures phantom pairs, and **concatenate the files in `\input` order** — because the
+window is a character distance, feeding the sections in the wrong order butts the end of one
+against the start of another and invents adjacencies that no reader will ever see. This is not
+hypothetical: a run that ordered the files `introduction design evaluation related` reported
+two `So` openers 518 characters apart as a defect. In reading order the same two sentences are
+18,550 characters and two sections apart. Prefer the PDF extract, which cannot get this wrong.
+The window is in characters, not sentences, on purpose: a sentence-index approach breaks on
+two-column extraction artifacts.
 
 The adjacent case is worth eyeballing rather than automating: the same construction opening
 three consecutive paragraphs — "We use...", "We implement...", "We employ...". A grep for
