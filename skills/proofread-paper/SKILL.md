@@ -160,13 +160,40 @@ figure's number until the parent `\caption` runs. Fix, preserving layout exactly
 Every figure/table/section that exists must be referenced at least once, and every number
 referenced must exist. An orphan float is as much a defect as a dangling ref.
 
+Do this from the source, by cross-checking each `\label` against the `\ref`s that use it.
+Counting `Figure N` in the extract is not enough: the caption itself reads `Fig. 4.`, so a
+float whose number never appears in prose still looks present to a careless eye.
+
 ```bash
-# every Figure N in the PDF referenced somewhere in prose? (0 = orphan float)
+# Orphans: every \label declared on a live line with no live \ref anywhere.
+# Assumes nothing about label naming or directory layout.
+grep -rh --include='*.tex' '\\label{' . | grep -v '^[[:space:]]*%' \
+  | grep -o '\\label{[^}]*}' | sed 's/.*{//;s/}//' | sort -u \
+  | while read -r l; do
+      n=$(grep -rh --include='*.tex' -- "\\\\ref{$l}" . | grep -vc '^[[:space:]]*%')
+      [ "$n" -eq 0 ] && echo "  ORPHAN: $l"
+    done
+
+# Reverse direction: every Figure N named in prose must exist as a caption.
+# Brace ${n} -- bare $n[^0-9] is an array subscript in zsh and the loop silently
+# reports 0 for every figure, which reads exactly like "no orphans".
 for n in $(seq 1 22); do
-  printf "Fig %s: %s\n" "$n" "$(grep -o "Figure[s]* $n[^0-9]" flat.txt | wc -l)"
+  printf "Fig %s: %s\n" "$n" "$(grep -oE "Figure[s]? ${n}([^0-9]|$)" flat.txt | wc -l)"
 done
-grep -rn "\\\\label{fig:\|\\\\label{tab:\|\\\\label{sec:" tex/ | grep -v ":[0-9]*: *%"
 ```
+
+Unreferenced `sec:` labels are normal and not defects; floats and tables are. Labels inside
+`\iffalse` or commented-out blocks are excluded above on purpose, or every disabled draft
+section reports as an orphan.
+
+**A caption is not a reference.** In a 6-page paper the TCP/RDMA coexistence figure carried
+`\label{rdma-tcp-coexistence}` and no `\ref` to it existed anywhere — the plot was typeset and
+the prose never pointed at it, while the two neighbouring subsections both opened "Figure N
+shows ... phases". Two earlier passes over the same paper recorded "all figures referenced"
+because they matched the caption `Fig. 4.` and never checked the label. The old form of this
+sweep also grepped a hardcoded `tex/` directory for `\label{fig:`-prefixed names; this paper
+keeps its sources at the repo root and labels floats `\label{rdma-control-basic}`, so that
+grep matched nothing and printed nothing, which is indistinguishable from passing.
 
 Found this way: an **orphan appendix** that nothing in the body referenced, while the
 implementation section's intro still promised the material that had been moved into it —
@@ -238,6 +265,15 @@ grep -oE "[0-9]+(GbE|Gbps|GB|MHz|ns|us|ms)" flat.txt     # missing value–unit 
 grep -oE "[0-9]+ ?K(B|hz)?\b" flat.txt                    # K is kelvin; kilo is k
 grep -oE "∼ [0-9]|\$\\\\sim[0-9]" flat.txt                # inconsistent tilde spacing
 ```
+
+**The first grep reports false positives, not defects.** `pdftotext` and pypdf drop the space
+between a value and its unit, so run against `flat.txt` it flags every *correctly* spaced
+number in the paper. One pass got eleven hits — `200µs`, `97Gbps`, `6µs` — and all eleven were
+right in both the source and the rendered page. This is the core rule inverted: the extract is
+authoritative for what the reader sees *between* words, and actively misleading here. Before
+acting on a hit, grep the `.tex` for it; if the source has a real space, the extract is lying,
+and rendering the page settles it. "Fixing" these inserts `\,` or `~` into correct text and
+buys nothing but a chance to break something.
 
 - Space between value and unit; correct prefix case (`k` kilo, `K` kelvin); no
   stand-alone prefixes ("4G tmpfs" → "4 GB").
@@ -493,7 +529,7 @@ figure it cites.
 Do not trust that an edit landed. Rebuild and re-extract:
 
 ```bash
-rm -f main.aux && make >/dev/null 2>&1
+latexmk -C >/dev/null 2>&1 && latexmk -pdf -interaction=nonstopmode main.tex >/dev/null 2>&1
 grep -n "undefined" main.log | grep -v "Font shape"    # must be empty
 pdftotext main.pdf new_all.txt
 grep -c "??" new_all.txt                                # must be 0
@@ -505,6 +541,13 @@ unit spacing, the previously misspelled words. Confirm figure captions still car
 numbers you expect and that nothing shifted the page count past the limit.
 
 A LaTeX build "succeeding" means nothing here — undefined references are warnings.
+
+**Use `latexmk -C`, not `rm -f main.aux`.** Deleting the `.aux` (or `.aux` and `.bbl` together)
+makes latexmk run bibtex before pdflatex has regenerated the `.aux`, so bibtex reports `I found
+no \citation commands` and latexmk *caches that failure*: every subsequent run exits 12 with
+`bibtex main: gave an error in previous invocation` and refuses to rebuild, while a stale but
+correct-looking PDF sits on disk. Check `main.blg` for `^I found no` before believing a bibtex
+error is real — and always re-check the error count after a full clean, not after a partial one.
 
 ## Step 6 — Report
 
