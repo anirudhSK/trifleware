@@ -354,6 +354,64 @@ Real failures found:
 - Read the bibliography end to end before submitting. Cite only what you understand, and
   do not pad.
 
+### References that do not exist
+
+A citation that looks entirely reasonable and is not real: an invented title, a real title
+pinned to the wrong venue or year, two papers merged into one, or an author list that drifted.
+**Run this whenever any part of the bibliography was assembled with LLM help** — the failure
+mode is plausibility, so reading the entry will not catch it. A leftover comment in the `.bib`
+like `% Key invented -- you gave the title but no citation key` is a direct signal to sweep.
+
+Resolve every DOI and compare the returned metadata against what the entry claims:
+
+```bash
+python3 - <<'EOF'
+import re, json, subprocess, difflib
+entries=[e for e in re.split(r'\n(?=@)', open('refs.bib').read()) if e.strip().startswith('@')]
+def fld(e,n):
+    m=re.search(rf'\n\s*{n}\s*=\s*\{{(.+?)\}},?\s*\n', e, re.S)
+    return re.sub(r'\s+',' ',m.group(1)).strip() if m else ''
+def first(x): return (x[0] if x else '') if isinstance(x,list) else (x or '')
+def norm(t): return ' '.join(re.sub(r'[^a-z0-9 ]',' ',re.sub(r'[{}]','',t.lower())).split())
+for e in entries:
+    key=re.search(r'@\w+\s*\{\s*([^,]+)',e).group(1).strip()
+    doi, bt, by = fld(e,'doi'), fld(e,'title'), fld(e,'year')
+    if not doi: print(f'{key:26s} no DOI - verify by hand'); continue
+    out=subprocess.run(['curl','-s','-m','25','-LH','Accept: application/json',
+                        f'https://doi.org/{doi}'],capture_output=True,text=True).stdout
+    try: d=json.loads(out)
+    except Exception: print(f'{key:26s} DOI DID NOT RESOLVE  <-- {doi}'); continue
+    # Crossref splits "Title: subtitle" across two fields; rejoin or every colon title mismatches
+    rt=' '.join(x for x in (first(d.get('title')), first(d.get('subtitle'))) if x)
+    ry=str(first(first(d.get('issued',{}).get('date-parts',[['']]))))
+    r=difflib.SequenceMatcher(None, norm(bt), norm(rt)).ratio()
+    if r<0.82 or by!=ry:
+        print(f'{key:26s} CHECK  title {r:.2f}  year {by} vs {ry}\n   bib: {bt[:68]}\n   doi: {rt[:68]}')
+EOF
+```
+
+**A DOI that resolves proves the DOI exists, not that your entry describes it.** Always diff the
+returned title and year; a fabricated entry carrying a real DOI copied off a neighbouring paper
+resolves with a 200 and is still wrong.
+
+Traps, all of which cost time in practice:
+
+- Crossref returns `title` as a string for some records and a list for others. Indexing `[0]`
+  blindly yields the first *character*, and every entry then reports a mismatch. The snippet's
+  `first()` handles both. If a run flags literally everything, suspect the harness, not the `.bib`.
+- Titles with a colon are stored as `title` + `subtitle`. Rejoin them, or `TIMELY: RTT-based
+  Congestion Control` scores 0.20 against a stored title of just `TIMELY`.
+- `usenix.org` returns **403** to `curl` and to automated fetchers, and arXiv's `export` API may
+  be blocked outright. A 403 is not a dead link. NSDI/OSDI papers and arXiv preprints usually
+  carry no DOI at all, so verify those by web search on the exact title plus author surnames,
+  and confirm venue, year and page range from the result.
+- Verify the *author list*, not just the title. A real paper with two invented co-authors still
+  resolves and still matches on title.
+
+Report what you verified and how, and list any entry you could not confirm rather than
+quietly leaving it in.
+
+
 ### Page limit, and how to shrink when you are over
 
 ```bash
